@@ -1,7 +1,11 @@
 /* =========================================================
    Hasan Bukhari — Portfolio JS (cross-platform, resilient)
+   Matches the rewritten index.html + your CSS.
 ========================================================= */
 
+/* ---------------------------
+   Profile + Projects (edit me)
+---------------------------- */
 const PROFILE = {
   email: "hasan.bukhari@usm.edu",
   github: "https://github.com/PurplePoet25",
@@ -35,7 +39,7 @@ const PROJECTS = [
       "Focus on interpretability: charts and outputs emphasize learning and comparison."
     ],
     links: [
-      { label: "GitHub", href: "https://github.com/PurplePoet25" }
+      { label: "GitHub", href: "https://github.com/PurplePoet25/BuriDriftSimulator" }
     ]
   },
   {
@@ -49,7 +53,7 @@ const PROJECTS = [
       "Validation-first approach: detects common input issues and provides clear feedback."
     ],
     links: [
-      { label: "GitHub", href: "https://github.com/PurplePoet25" }
+      { label: "GitHub", href: "https://github.com/PurplePoet25/ProtienVis" }
     ]
   },
   {
@@ -63,7 +67,7 @@ const PROJECTS = [
       "Designed cutscenes and multi-act structure with consistent asset organization."
     ],
     links: [
-      { label: "GitHub", href: "https://github.com/PurplePoet25" }
+      { label: "GitHub", href: "https://github.com/PurplePoet25/ToAshAgain" }
     ]
   },
   {
@@ -77,39 +81,588 @@ const PROJECTS = [
       "Team leadership: coordinated tasks, reviews, and documentation."
     ],
     links: [
-      { label: "GitHub", href: "https://github.com/PurplePoet25" }
+      { label: "GitHub", href: "https://github.com/PurplePoet25/Sc-Roll-Concept-Project" }
     ]
   }
 ];
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Footer year
-  document.getElementById("year").textContent = new Date().getFullYear();
 
-  // Email link + text
-  const emailText = document.getElementById("emailText");
-  const emailLink = document.getElementById("emailLink");
-  emailText.textContent = PROFILE.email;
-  emailLink.href = `mailto:${encodeURIComponent(PROFILE.email)}`;
+/* ---------------------------
+   Tiny helpers
+---------------------------- */
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
-  // Glow mode (Studio ↔ Nebula)
-  const glowToggle = document.getElementById("glowToggle");
-  const glowLabel = document.getElementById("glowLabel");
+function safeJsonParse(str, fallback) {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return fallback;
+  }
+}
 
+function clamp(n, a, b) {
+  return Math.max(a, Math.min(b, n));
+}
+
+/* ---------------------------
+   Theme: glow + mode
+   - glow: toggles extra glow strength (body.classList.toggle("glow"))
+   - mode: studio vs nebula (body dataset mode)
+---------------------------- */
+function initThemeToggles() {
+  const glowBtn = $("#glowToggle");
+  const glowLabel = $("#glowLabel");
+
+  const modeBtn = $("#modeToggle");
+  const modeLabel = $("#modeLabel");
+
+  // restore state
+  const savedGlow = localStorage.getItem("hb_glow");
   const savedMode = localStorage.getItem("hb_mode");
-  if (savedMode === "nebula" || savedMode === "studio") {
-    setMode(savedMode, false);
-  } else {
-    setMode("studio", false);
+
+  if (savedGlow === "1") document.body.classList.add("glow");
+  if (savedMode === "nebula") document.body.dataset.mode = "nebula";
+
+  if (glowBtn) {
+    const isOn = document.body.classList.contains("glow");
+    glowBtn.setAttribute("aria-pressed", String(isOn));
+    if (glowLabel) glowLabel.textContent = isOn ? "Glow: On" : "Glow";
   }
 
-  glowToggle.addEventListener("click", () => {
-    const current = document.body.getAttribute("data-mode") || "studio";
-    setMode(current === "studio" ? "nebula" : "studio", true);
+  if (modeBtn) {
+    const nebulaOn = document.body.dataset.mode === "nebula";
+    modeBtn.setAttribute("aria-pressed", String(nebulaOn));
+    if (modeLabel) modeLabel.textContent = nebulaOn ? "Studio" : "Nebula";
+  }
+
+  glowBtn?.addEventListener("click", () => {
+    const nowOn = document.body.classList.toggle("glow");
+    glowBtn.setAttribute("aria-pressed", String(nowOn));
+    if (glowLabel) glowLabel.textContent = nowOn ? "Glow: On" : "Glow";
+    localStorage.setItem("hb_glow", nowOn ? "1" : "0");
   });
 
-  // Press "g" to toggle glow mode (nice power user touch)
-  document.addEventListener("keydown", (e) => {
+  modeBtn?.addEventListener("click", () => {
+    const nowNebula = document.body.dataset.mode !== "nebula";
+    document.body.dataset.mode = nowNebula ? "nebula" : "studio";
+    modeBtn.setAttribute("aria-pressed", String(nowNebula));
+    if (modeLabel) modeLabel.textContent = nowNebula ? "Studio" : "Nebula";
+    localStorage.setItem("hb_mode", nowNebula ? "nebula" : "studio");
+  });
+}
+
+/* ---------------------------
+   Dock: active tab highlighting
+   - syncs both desktop + mobile .dockItem
+   - based on scroll position
+---------------------------- */
+function initDockActiveSync() {
+  const dockLinks = $$(".dockItem[data-nav]");
+  if (!dockLinks.length) return;
+
+  const sections = ["home", "projects", "resume", "contact"]
+    .map((id) => ({ id, el: document.getElementById(id) }))
+    .filter((x) => x.el);
+
+  function setActive(id) {
+    dockLinks.forEach((a) => a.classList.toggle("active", a.dataset.nav === id));
+  }
+
+  // click -> immediate active (scroll will confirm)
+  dockLinks.forEach((a) => {
+    a.addEventListener("click", () => setActive(a.dataset.nav));
+  });
+
+  // scroll -> active section
+  const onScroll = () => {
+    const y = window.scrollY + 140; // offset for topbar/dock
+    let current = sections[0]?.id || "home";
+
+    for (const s of sections) {
+      if (!s.el) continue;
+      if (s.el.offsetTop <= y) current = s.id;
+    }
+    setActive(current);
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+}
+
+/* ---------------------------
+   Toast + Clipboard
+---------------------------- */
+let toastTimer = null;
+function showToast(msg = "Copied!") {
+  const t = $("#toast");
+  if (!t) return;
+
+  t.textContent = msg;
+  t.hidden = false;
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    t.hidden = true;
+  }, 1600);
+}
+
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast("Copied!");
+    return true;
+  } catch {
+    // fallback
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+      showToast("Copied!");
+      return true;
+    } catch {
+      showToast("Copy failed");
+      return false;
+    } finally {
+      ta.remove();
+    }
+  }
+}
+
+function initContactBits() {
+  // year
+  const y = $("#year");
+  if (y) y.textContent = String(new Date().getFullYear());
+
+  // populate contact links if present
+  const emailText = $("#emailText");
+  const emailLink = $("#emailLink");
+  if (emailText) emailText.textContent = PROFILE.email;
+  if (emailLink) emailLink.href = `mailto:${PROFILE.email}`;
+
+  // quick links (optional)
+  const gh = $("#githubLink");
+  const li = $("#linkedinLink");
+  if (gh) gh.href = PROFILE.github;
+  if (li) li.href = PROFILE.linkedin;
+
+  // copy buttons
+  $("#copyEmailBtn")?.addEventListener("click", () => copyToClipboard(PROFILE.email));
+  $("#copyEmailBtn2")?.addEventListener("click", () => copyToClipboard(PROFILE.email));
+
+  // contact form stub (prevents reload + copies a mailto template)
+  const form = $("#contactForm");
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const name = String(fd.get("name") || "").trim();
+    const from = String(fd.get("email") || "").trim();
+    const subject = String(fd.get("subject") || "").trim() || "Hello Hasan";
+    const message = String(fd.get("message") || "").trim();
+
+    const body = [
+      message,
+      "",
+      "—",
+      name ? `Name: ${name}` : null,
+      from ? `Email: ${from}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    // Copy a nice email template to clipboard + open mailto
+    copyToClipboard(body);
+    window.location.href = `mailto:${encodeURIComponent(PROFILE.email)}?subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(body)}`;
+  });
+}
+
+/* ---------------------------
+   Projects: render + search + filters + modal
+---------------------------- */
+function normalizeTag(t) {
+  return String(t || "")
+    .trim()
+    .toLowerCase();
+}
+
+// Map filter buttons -> tag keywords
+const FILTER_MAP = {
+  all: null,
+  python: ["python"],
+  cpp: ["c++", "cpp"],
+  web: ["web", "html", "css", "javascript", "js"],
+  data: ["data", "pandas", "sql", "visualization", "matplotlib"],
+};
+
+function projectToCardHTML(p) {
+  const tags = (p.tags || []).map(String);
+  const tagChips = tags
+    .slice(0, 3)
+    .map((t) => `<span class="tag">${escapeHtml(t)}</span>`)
+    .join("");
+
+  const dataTags = tags.map(normalizeTag).join(",");
+
+  return `
+    <article class="projectCard" tabindex="0"
+      data-id="${escapeAttr(p.id)}"
+      data-tags="${escapeAttr(dataTags)}"
+      data-title="${escapeAttr(p.title)}"
+      data-meta="${escapeAttr((p.year ? p.year + " • " : "") + tags.slice(0, 2).join(" • "))}"
+      data-desc="${escapeAttr(p.summary || "")}"
+      data-links='${escapeAttr(JSON.stringify(p.links || []))}'
+      data-details='${escapeAttr(JSON.stringify(p.details || []))}'
+    >
+      <h3 class="projectTitle">${escapeHtml(p.title)}</h3>
+      <p class="projectDesc">${escapeHtml(p.summary || "")}</p>
+      <div class="projectMetaRow">${tagChips}</div>
+    </article>
+  `;
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+function escapeAttr(s) {
+  // also safe for placing inside single/double quotes in attributes
+  return escapeHtml(s).replaceAll("`", "&#096;");
+}
+
+function initProjects() {
+  const grid = $("#projectsGrid");
+  if (!grid) return;
+
+  // If grid is empty (or you want JS-driven), render from PROJECTS
+  // If you already placed cards in HTML, we’ll just wire them up.
+  const existingCards = $$(".projectCard", grid);
+  const shouldRenderFromArray = existingCards.length === 0 && Array.isArray(PROJECTS) && PROJECTS.length;
+
+  if (shouldRenderFromArray) {
+    grid.innerHTML = PROJECTS.map(projectToCardHTML).join("");
+  }
+
+  const searchInput = $("#projectSearch");
+  const filterBtns = $$(".filterBtn[data-filter]");
+  let activeFilter = "all";
+  let query = "";
+
+  const cards = () => $$(".projectCard", grid);
+
+  function cardMatchesFilter(card) {
+    const f = FILTER_MAP[activeFilter];
+    if (!f) return true;
+
+    const tags = (card.getAttribute("data-tags") || "")
+      .split(",")
+      .map((x) => x.trim())
+      .filter(Boolean);
+
+    return f.some((needle) => tags.includes(normalizeTag(needle)));
+  }
+
+  function cardMatchesQuery(card) {
+    if (!query) return true;
+    const hay = [
+      card.getAttribute("data-title") || "",
+      card.getAttribute("data-desc") || "",
+      card.getAttribute("data-tags") || "",
+      card.getAttribute("data-meta") || "",
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return hay.includes(query);
+  }
+
+  function applyFilters() {
+    const list = cards();
+    let visible = 0;
+
+    list.forEach((c) => {
+      const ok = cardMatchesFilter(c) && cardMatchesQuery(c);
+      c.style.display = ok ? "" : "none";
+      if (ok) visible++;
+    });
+
+    // tiny UX: if nothing matches, show a friendly placeholder
+    let empty = $("#projectsEmpty");
+    if (!empty) {
+      empty = document.createElement("div");
+      empty.id = "projectsEmpty";
+      empty.className = "muted";
+      empty.style.marginTop = "14px";
+      empty.style.fontWeight = "700";
+      grid.insertAdjacentElement("afterend", empty);
+    }
+    empty.textContent = visible ? "" : "No matches. Try a different search/filter.";
+  }
+
+  searchInput?.addEventListener("input", (e) => {
+    query = String(e.target.value || "").trim().toLowerCase();
+    applyFilters();
+  });
+
+  filterBtns.forEach((b) => {
+    b.addEventListener("click", () => {
+      filterBtns.forEach((x) => x.classList.remove("active"));
+      b.classList.add("active");
+      activeFilter = b.dataset.filter || "all";
+      applyFilters();
+    });
+  });
+
+  // modal wiring
+  initProjectModal(grid);
+
+  applyFilters();
+}
+
+/* ---------------------------
+   Modal: open/close + a11y + keyboard
+---------------------------- */
+function initProjectModal(gridRoot) {
+  const overlay = $("#modalOverlay");
+  const closeBtn = $("#modalClose");
+  const titleEl = $("#modalTitle");
+  const metaEl = $("#modalMeta");
+  const bodyEl = $("#modalBody");
+  const footEl = $("#modalFoot");
+
+  if (!overlay || !titleEl || !metaEl || !bodyEl || !footEl) return;
+
+  let lastFocus = null;
+
+  function openModalFromCard(card) {
+    const title = card.getAttribute("data-title") || "Project";
+    const meta = card.getAttribute("data-meta") || "";
+    const desc = card.getAttribute("data-desc") || "";
+    const links = safeJsonParse(card.getAttribute("data-links") || "[]", []);
+    const details = safeJsonParse(card.getAttribute("data-details") || "[]", []);
+
+    titleEl.textContent = title;
+    metaEl.textContent = meta;
+
+    const bullets = Array.isArray(details) && details.length
+      ? `<ul class="bullets">${details.map((d) => `<li>${escapeHtml(d)}</li>`).join("")}</ul>`
+      : "";
+
+    bodyEl.innerHTML = `
+      <p style="margin:0 0 12px;">${escapeHtml(desc)}</p>
+      ${bullets}
+    `;
+
+    footEl.innerHTML = "";
+    (links || []).forEach((l) => {
+      if (!l?.href) return;
+      const a = document.createElement("a");
+      a.className = "modalLink";
+      a.target = "_blank";
+      a.rel = "noreferrer";
+      a.href = l.href;
+      a.innerHTML = `<span class="ext" aria-hidden="true">↗</span><span>${escapeHtml(
+        l.label || "Link"
+      )}</span>`;
+      footEl.appendChild(a);
+    });
+
+    lastFocus = document.activeElement;
+    overlay.hidden = false;
+
+    // focus close button (or first link)
+    const focusTarget = closeBtn || footEl.querySelector("a") || overlay;
+    focusTarget?.focus();
+
+    // lock background scroll
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    overlay.hidden = true;
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+    lastFocus?.focus?.();
+  }
+
+  // Clicks: card -> open
+  gridRoot.addEventListener("click", (e) => {
+    const card = e.target.closest(".projectCard");
+    if (!card) return;
+    openModalFromCard(card);
+  });
+
+  // Keyboard: Enter/Space on card -> open
+  gridRoot.addEventListener("keydown", (e) => {
+    const card = e.target.closest(".projectCard");
+    if (!card) return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      openModalFromCard(card);
+    }
+  });
+
+  // Close controls
+  closeBtn?.addEventListener("click", closeModal);
+
+  overlay.addEventListener("click", (e) => {
+    // clicking backdrop closes; clicking inside modal does not
+    const panel = e.target.closest(".modalPanel, .modal");
+    if (!panel && e.target === overlay) closeModal();
+  });
+
+  // Escape closes
+  window.addEventListener("keydown", (e) => {
+    if (overlay.hidden) return;
+    if (e.key === "Escape") closeModal();
+  });
+
+  // Basic focus trap
+  overlay.addEventListener("keydown", (e) => {
+    if (overlay.hidden) return;
+    if (e.key !== "Tab") return;
+
+    const focusables = [
+      ...overlay.querySelectorAll(
+        'button, a[href], input, textarea, select, [tabindex]:not([tabindex="-1"])'
+      ),
+    ].filter((el) => !el.hasAttribute("disabled") && el.offsetParent !== null);
+
+    if (!focusables.length) return;
+
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  });
+}
+
+/* ---------------------------
+   Background canvas (lightweight)
+   - respects prefers-reduced-motion
+   - designed to be stable on laptops + phones
+---------------------------- */
+function initBackgroundCanvas() {
+  const canvas = $("#bg");
+  if (!canvas) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ctx = canvas.getContext("2d", { alpha: true });
+
+  let w = 0,
+    h = 0,
+    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+
+  const stars = [];
+  const STAR_COUNT = reduceMotion ? 45 : 95;
+
+  function resize() {
+    w = Math.floor(window.innerWidth);
+    h = Math.floor(window.innerHeight);
+    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    canvas.style.width = `${w}px`;
+    canvas.style.height = `${h}px`;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  function rand(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function seed() {
+    stars.length = 0;
+    for (let i = 0; i < STAR_COUNT; i++) {
+      stars.push({
+        x: rand(0, w),
+        y: rand(0, h),
+        r: rand(0.6, 1.8),
+        a: rand(0.08, 0.24),
+        vx: rand(-0.05, 0.05),
+        vy: rand(0.02, 0.10),
+        tw: rand(0.002, 0.010),
+      });
+    }
+  }
+
+  let t = 0;
+  function frame() {
+    if (reduceMotion) {
+      // One static draw, then stop.
+      draw(true);
+      return;
+    }
+    draw(false);
+    requestAnimationFrame(frame);
+  }
+
+  function draw(staticOnly) {
+    ctx.clearRect(0, 0, w, h);
+
+    t += 1;
+
+    // subtle moving starfield
+    for (const s of stars) {
+      const twinkle = 1 + Math.sin(t * s.tw) * 0.35;
+      const alpha = clamp(s.a * twinkle, 0.03, 0.35);
+
+      ctx.globalAlpha = alpha;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = "#ffffff";
+      ctx.fill();
+
+      if (!staticOnly) {
+        s.x += s.vx;
+        s.y += s.vy;
+        if (s.y > h + 10) s.y = -10;
+        if (s.x > w + 10) s.x = -10;
+        if (s.x < -10) s.x = w + 10;
+      }
+    }
+
+    ctx.globalAlpha = 1;
+  }
+
+  resize();
+  seed();
+  frame();
+
+  window.addEventListener("resize", () => {
+    resize();
+    seed();
+  });
+}
+
+/* ---------------------------
+   Boot
+---------------------------- */
+document.addEventListener("DOMContentLoaded", () => {
+  initThemeToggles();
+  initDockActiveSync();
+  initContactBits();
+  initProjects();
+  initBackgroundCanvas();
+});
     if (e.key.toLowerCase() === "g" && !isTypingTarget(e.target)) {
       const current = document.body.getAttribute("data-mode") || "studio";
       setMode(current === "studio" ? "nebula" : "studio", true);
