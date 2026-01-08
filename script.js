@@ -1,4 +1,4 @@
-/* Hasan Bukhari — Portfolio (vanilla JS)
+/* Hasan Bukhari — Futuristic Portfolio (vanilla JS)
    Features:
    - Tabbed navigation with animated indicator + URL hash
    - Projects grid + modal
@@ -33,7 +33,7 @@
         "Designed for iterative experimentation and reproducible outputs.",
       ],
       links: [
-        { label: "GitHub", href: https://github.com/PurplePoet25/QTL-Analysis-Toolkit }
+        { label: "GitHub", href: PROFILE.github },
       ],
     },
     {
@@ -49,9 +49,7 @@
         "Interactive graphs for allele frequency trajectories.",
         "Built as a learning tool — fast feedback, clear visuals.",
       ],
-      links: [
-        { label: "GitHub", href: https://github.com/PurplePoet25/BuriDriftSimulator }
-      ],
+      links: [],
     },
     {
       id: "wright",
@@ -66,9 +64,7 @@
         "Compares deterministic vs stochastic trajectories side‑by‑side.",
         "Exports runs for analysis and report workflows.",
       ],
-      links: [
-        { label: "GitHub", href: https://github.com/PurplePoet25/Selection-Simulator-Wright-Fisher-Deterministic-Stochastic- }
-      ],
+      links: [],
     },
     {
       id: "proteinvis",
@@ -83,9 +79,7 @@
         "Visualizes amino acid chains with human‑readable legends.",
         "Built to make abstract processes feel tangible.",
       ],
-      links: [
-        { label: "GitHub", href: https://github.com/PurplePoet25/ProtienVis }
-      ],
+      links: [],
     },
     {
       id: "toashagain",
@@ -100,9 +94,7 @@
         "Enemy framework (melee, ranged, boss) + cutscene sequencing.",
         "Modularized codebase for sanity and scale.",
       ],
-      links: [
-        { label: "GitHub", href: https://github.com/PurplePoet25/ToAshAgain }
-      ],
+      links: [],
     },
     {
       id: "scroll",
@@ -117,9 +109,7 @@
         "Coordinated team responsibilities and delivery milestones.",
         "Produced clear documentation for handoff + maintenance.",
       ],
-      links: [
-        { label: "GitHub", href: https://github.com/PurplePoet25/Sc-Roll-Concept-Project }
-      ],
+      links: [],
     },
   ];
 
@@ -336,21 +326,39 @@
   }
 
   document.addEventListener("click", (e) => {
-    const t = e.target;
-    if (!(t instanceof HTMLElement)) return;
+  const el = e.target instanceof Element ? e.target : null;
+  if (!el) return;
 
-    const copyVal = t.getAttribute("data-copy");
-    if (copyVal) {
-      copyText(copyVal === "email" ? PROFILE.email : copyVal);
+  // Copy helpers (works even if user clicks on an icon/span inside the button)
+  const copyBtn = el.closest("[data-copy]");
+  if (copyBtn instanceof HTMLElement) {
+    const copyVal = copyBtn.getAttribute("data-copy") || "";
+    copyText(copyVal === "email" ? PROFILE.email : copyVal);
+  }
+
+  const linksBtn = el.closest("[data-copy-links]");
+  if (linksBtn) {
+    copyText(`GitHub: ${PROFILE.github}
+LinkedIn: ${PROFILE.linkedin}
+Email: ${PROFILE.email}`);
+    showToast("Profile links copied ✦");
+  }
+
+  // Jump buttons (hero CTAs)
+  const jumpBtn = el.closest("[data-jump]");
+  if (jumpBtn instanceof HTMLElement) {
+    const id = jumpBtn.getAttribute("data-jump");
+    if (id) {
+      e.preventDefault();
+      activate(id);
+      history.replaceState(null, "", `#${id}`);
+      // optional: keep it snappy
+      qs(`#panel-${id}`)?.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
     }
+  }
+});
 
-    if (t.hasAttribute("data-copy-links")) {
-      copyText(`GitHub: ${PROFILE.github}\nLinkedIn: ${PROFILE.linkedin}\nEmail: ${PROFILE.email}`);
-      showToast("Profile links copied ✦");
-    }
-  });
-
-  // ---------- Contact form (mailto draft) ----------
+// ---------- Contact form (mailto draft) ----------
   const form = qs("#contactForm");
   form?.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -398,13 +406,66 @@
     if (e.key.toLowerCase() === "g") setGlow(!document.body.classList.contains("glow"));
   });
 
-  // ---------- Footer year ----------
+  // ---------- Stats count-up ----------
+const statEls = qsa(".stat__num[data-count]");
+const animateStat = (el) => {
+  if (el.dataset.done === "1") return;
+  el.dataset.done = "1";
+
+  const raw = el.getAttribute("data-count") || el.textContent.trim();
+  const target = Number(raw);
+  if (!Number.isFinite(target)) return;
+
+  const suffix = el.getAttribute("data-suffix") || "";
+  const decimalsAttr = el.getAttribute("data-decimals");
+  const decimals = decimalsAttr ? Number(decimalsAttr) : (String(raw).includes(".") ? 1 : 0);
+  const duration = prefersReducedMotion() ? 0 : 900;
+
+  if (duration === 0) {
+    el.textContent = `${target.toFixed(decimals)}${suffix}`;
+    return;
+  }
+
+  const start = performance.now();
+  const from = 0;
+
+  const tick = (now) => {
+    const t = Math.min(1, (now - start) / duration);
+    // easeOutCubic
+    const eased = 1 - Math.pow(1 - t, 3);
+    const val = from + (target - from) * eased;
+    el.textContent = `${val.toFixed(decimals)}${suffix}`;
+    if (t < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+};
+
+if (statEls.length) {
+  const statsWrap = qs(".stats") || statEls[0].closest("section");
+  if (statsWrap && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          statEls.forEach(animateStat);
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.35 });
+    io.observe(statsWrap);
+  } else {
+    // fallback
+    statEls.forEach(animateStat);
+  }
+}
+
+// ---------- Footer year ----------
   const year = qs("#year");
   if (year) year.textContent = String(new Date().getFullYear());
 
   // ---------- Particle Constellation ----------
   const canvas = qs("#particles");
   const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  const prefersReducedMotion = () => !!reduceMotion;
 
   const ctx = canvas?.getContext("2d");
   let W = 0, H = 0, DPR = 1;
