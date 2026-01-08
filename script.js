@@ -1,39 +1,533 @@
-/* Hasan Bukhari — Futuristic Portfolio (vanilla JS)
-   Features:
-   - Tabbed navigation with animated indicator + URL hash
-   - Projects grid + modal
-   - Copy-to-clipboard buttons
-   - Particle constellation background
-   - "Glow" toggle (and press G)
-*/
+/* =========================================================
+   Hasan Bukhari — Portfolio JS (cross-platform, resilient)
+========================================================= */
 
-(() => {
-  const qs = (s, el = document) => el.querySelector(s);
-  const qsa = (s, el = document) => Array.from(el.querySelectorAll(s));
+const PROFILE = {
+  email: "hasan.bukhari@usm.edu",
+  github: "https://github.com/PurplePoet25",
+  linkedin: "https://linkedin.com/in/hasan-bukhari-7ab080305",
+};
 
-  // ---------- Data ----------
-  const PROFILE = {
-    email: "hasan.bukhari@usm.edu",
-    github: "https://github.com/PurplePoet25",
-    linkedin: "https://linkedin.com/in/hasan-bukhari-7ab080305/",
+const PROJECTS = [
+  {
+    id: "qtl",
+    title: "QTL Analysis Toolkit",
+    year: "2025",
+    tags: ["Python", "Pandas", "Matplotlib", "Bioinformatics"],
+    summary: "Interactive genome-wide QTL scans linking genotype to phenotype, with LOD plots and CSV outputs.",
+    details: [
+      "Built analysis pipeline for QTL scanning and interpretation using clean, reproducible outputs.",
+      "Generates publication-ready visualizations and structured CSV exports for downstream work.",
+      "Designed for clarity: results are easy to audit and explain."
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/PurplePoet25/QTL-Analysis-Toolkit" }
+    ]
+  },
+  {
+    id: "buri",
+    title: "Buri Drift Simulator",
+    year: "2025",
+    tags: ["Python", "NumPy", "Simulation"],
+    summary: "Genetic drift simulator reproducing classic results via stochastic modeling and interactive visuals.",
+    details: [
+      "Implements stochastic drift dynamics with configurable parameters and multiple runs.",
+      "Focus on interpretability: charts and outputs emphasize learning and comparison."
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/PurplePoet25" }
+    ]
+  },
+  {
+    id: "proteinvis",
+    title: "ProteinVis (DNA → Protein)",
+    year: "2024",
+    tags: ["Python", "Validation", "Visualization"],
+    summary: "Codon translation and amino-acid visualization tool designed for teaching molecular biology.",
+    details: [
+      "Translates sequences into proteins and visualizes results in a learner-friendly way.",
+      "Validation-first approach: detects common input issues and provides clear feedback."
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/PurplePoet25" }
+    ]
+  },
+  {
+    id: "toashagain",
+    title: "To Ash Again (2D Platformer)",
+    year: "2025",
+    tags: ["Python", "Pygame", "Game Dev"],
+    summary: "Pixel-art platformer with physics, modular enemy logic, and progression systems.",
+    details: [
+      "Modularized gameplay systems: movement, collisions, enemies, UI, and progression.",
+      "Designed cutscenes and multi-act structure with consistent asset organization."
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/PurplePoet25" }
+    ]
+  },
+  {
+    id: "scroll",
+    title: "Sc-Roll (Attendance Web App)",
+    year: "2024",
+    tags: ["React", "Product", "Docs"],
+    summary: "Led a 4-member team; built an attendance system used by 200+ users; improved record accuracy.",
+    details: [
+      "Product-oriented build: consistent flows, error prevention, and readable admin views.",
+      "Team leadership: coordinated tasks, reviews, and documentation."
+    ],
+    links: [
+      { label: "GitHub", href: "https://github.com/PurplePoet25" }
+    ]
+  }
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Footer year
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Email link + text
+  const emailText = document.getElementById("emailText");
+  const emailLink = document.getElementById("emailLink");
+  emailText.textContent = PROFILE.email;
+  emailLink.href = `mailto:${encodeURIComponent(PROFILE.email)}`;
+
+  // Glow mode (Studio ↔ Nebula)
+  const glowToggle = document.getElementById("glowToggle");
+  const glowLabel = document.getElementById("glowLabel");
+
+  const savedMode = localStorage.getItem("hb_mode");
+  if (savedMode === "nebula" || savedMode === "studio") {
+    setMode(savedMode, false);
+  } else {
+    setMode("studio", false);
+  }
+
+  glowToggle.addEventListener("click", () => {
+    const current = document.body.getAttribute("data-mode") || "studio";
+    setMode(current === "studio" ? "nebula" : "studio", true);
+  });
+
+  // Press "g" to toggle glow mode (nice power user touch)
+  document.addEventListener("keydown", (e) => {
+    if (e.key.toLowerCase() === "g" && !isTypingTarget(e.target)) {
+      const current = document.body.getAttribute("data-mode") || "studio";
+      setMode(current === "studio" ? "nebula" : "studio", true);
+    }
+  });
+
+  function setMode(mode, announce){
+    document.body.setAttribute("data-mode", mode);
+    localStorage.setItem("hb_mode", mode);
+    glowToggle.setAttribute("aria-pressed", mode === "nebula" ? "true" : "false");
+    glowLabel.textContent = mode === "nebula" ? "Glow: On" : "Glow: Off";
+    if (announce) toast(mode === "nebula" ? "Glow enabled" : "Glow disabled");
+  }
+
+  // Copy buttons
+  document.querySelectorAll("[data-copy]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const what = btn.getAttribute("data-copy");
+      let text = "";
+      if (what === "email") text = PROFILE.email;
+      if (what === "profiles") text = `GitHub: ${PROFILE.github}\nLinkedIn: ${PROFILE.linkedin}`;
+
+      const ok = await copyToClipboard(text);
+      toast(ok ? "Copied" : "Copy failed (browser blocked clipboard)");
+    });
+  });
+
+  // View projects button
+  const viewProjectsBtn = document.getElementById("viewProjectsBtn");
+  viewProjectsBtn.addEventListener("click", (e) => {
+    // anchor does most of it; keep it clean and reliable
+  });
+
+  // Nav active state based on scroll
+  setupActiveNav();
+
+  // Projects render + filtering
+  renderProjects(PROJECTS);
+  setupProjectFilters(PROJECTS);
+
+  // Modal
+  setupModal();
+
+  // Contact form => mailto draft
+  const form = document.getElementById("contactForm");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const name = (data.get("name") || "").toString().trim();
+    const from = (data.get("from") || "").toString().trim();
+    const msg = (data.get("message") || "").toString().trim();
+
+    const subject = `Portfolio inquiry — ${name}`;
+    const body = `Name: ${name}\nEmail: ${from}\n\nMessage:\n${msg}\n`;
+    const mailto = `mailto:${encodeURIComponent(PROFILE.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+  });
+
+  // Stats count-up (never blank: HTML provides defaults)
+  animateStatsOnView();
+
+  // Background particles
+  startParticles();
+});
+
+/* ----------------- Utilities ----------------- */
+
+function isTypingTarget(el){
+  if (!el) return false;
+  const tag = el.tagName?.toLowerCase();
+  return tag === "input" || tag === "textarea" || el.isContentEditable;
+}
+
+async function copyToClipboard(text){
+  try{
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  }catch(_){}
+  // Fallback
+  try{
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    ta.style.top = "-9999px";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand("copy");
+    ta.remove();
+    return ok;
+  }catch(_){
+    return false;
+  }
+}
+
+/* ----------------- Toast ----------------- */
+
+let toastTimer = null;
+function toast(msg){
+  const t = document.getElementById("toast");
+  if (!t) return;
+  t.textContent = msg;
+  t.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    t.hidden = true;
+  }, 1400);
+}
+
+/* ----------------- Active Nav ----------------- */
+
+function setupActiveNav(){
+  const sections = ["home","projects","resume","contact"].map(id => document.getElementById(id)).filter(Boolean);
+  const navLinks = Array.from(document.querySelectorAll(".dockItem"));
+
+  const setActive = (id) => {
+    navLinks.forEach(a => a.classList.toggle("active", a.dataset.nav === id));
   };
 
-  const PROJECTS = [
-    {
-      id: "qtl",
-      title: "QTL Analysis Toolkit",
-      meta: "Python • Pandas • Matplotlib",
-      icon: "🧬",
-      blurb:
-        "Interactive genome‑wide QTL scans linking genotype to phenotype. Produces LOD plots + CSV outputs.",
-      tags: ["Python", "Pandas", "Matplotlib", "Bioinformatics", "Data Viz"],
-      bullets: [
-        "Runs genome‑wide scans and summarizes peak regions with exportable tables.",
-        "Plots LOD curves and clean, presentation‑ready figures.",
-        "Designed for iterative experimentation and reproducible outputs.",
-      ],
-      links: [
-        { label: "GitHub", href: PROFILE.github },
+  const obs = new IntersectionObserver((entries) => {
+    // pick the most visible section
+    const visible = entries
+      .filter(e => e.isIntersecting)
+      .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (visible?.target?.id) setActive(visible.target.id);
+  }, { threshold: [0.35, 0.5, 0.65] });
+
+  sections.forEach(s => obs.observe(s));
+
+  // Also update on hash change
+  window.addEventListener("hashchange", () => {
+    const id = (location.hash || "#home").replace("#","");
+    setActive(id);
+  });
+}
+
+/* ----------------- Projects ----------------- */
+
+function renderProjects(list){
+  const grid = document.getElementById("projectsGrid");
+  grid.innerHTML = "";
+
+  if (!list.length){
+    const empty = document.createElement("div");
+    empty.className = "projectCard";
+    empty.style.cursor = "default";
+    empty.innerHTML = `<h3 class="projectTitle">No matches</h3>
+      <p class="projectDesc">Try a different keyword or remove filters.</p>`;
+    grid.appendChild(empty);
+    return;
+  }
+
+  for (const p of list){
+    const card = document.createElement("article");
+    card.className = "projectCard";
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", `Open project: ${p.title}`);
+    card.addEventListener("click", () => openProjectModal(p.id));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") openProjectModal(p.id);
+    });
+
+    const tags = p.tags.slice(0, 4).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("");
+    card.innerHTML = `
+      <h3 class="projectTitle">${escapeHtml(p.title)}</h3>
+      <p class="projectDesc">${escapeHtml(p.summary)}</p>
+      <div class="projectMetaRow">
+        <span class="tag">${escapeHtml(p.year)}</span>
+        ${tags}
+      </div>
+    `;
+    grid.appendChild(card);
+  }
+}
+
+function setupProjectFilters(all){
+  const search = document.getElementById("projectSearch");
+  const tagWrap = document.getElementById("tagFilters");
+
+  // Build tag set
+  const tagSet = new Set();
+  all.forEach(p => p.tags.forEach(t => tagSet.add(t)));
+  const tags = Array.from(tagSet).sort();
+
+  const state = { q: "", tag: "All" };
+
+  // Render filters
+  const makeBtn = (label) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "filterBtn";
+    b.textContent = label;
+    b.addEventListener("click", () => {
+      state.tag = label;
+      update();
+      Array.from(tagWrap.children).forEach(x => x.classList.toggle("active", x.textContent === state.tag));
+    });
+    return b;
+  };
+
+  tagWrap.innerHTML = "";
+  const allBtn = makeBtn("All");
+  allBtn.classList.add("active");
+  tagWrap.appendChild(allBtn);
+  tags.forEach(t => tagWrap.appendChild(makeBtn(t)));
+
+  search.addEventListener("input", () => {
+    state.q = search.value.trim().toLowerCase();
+    update();
+  });
+
+  function update(){
+    let filtered = all;
+
+    if (state.tag !== "All"){
+      filtered = filtered.filter(p => p.tags.includes(state.tag));
+    }
+
+    if (state.q){
+      filtered = filtered.filter(p => {
+        const hay = `${p.title} ${p.summary} ${p.tags.join(" ")} ${p.year}`.toLowerCase();
+        return hay.includes(state.q);
+      });
+    }
+
+    renderProjects(filtered);
+  }
+}
+
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+/* ----------------- Modal ----------------- */
+
+let modalProjectIndex = new Map();
+function setupModal(){
+  modalProjectIndex = new Map(PROJECTS.map(p => [p.id, p]));
+
+  const overlay = document.getElementById("modalOverlay");
+  const modal = overlay.querySelector(".modal");
+  const closeBtn = document.getElementById("modalClose");
+
+  closeBtn.addEventListener("click", closeModal);
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (!overlay.hidden && e.key === "Escape") closeModal();
+  });
+
+  function closeModal(){
+    overlay.hidden = true;
+    document.body.style.overflow = "";
+  }
+
+  window.openProjectModal = (id) => {
+    const p = modalProjectIndex.get(id);
+    if (!p) return;
+
+    document.getElementById("modalTitle").textContent = p.title;
+    document.getElementById("modalMeta").textContent = `${p.tags[0] || "Project"} • ${p.year}`;
+
+    const body = document.getElementById("modalBody");
+    body.innerHTML = `
+      <p>${escapeHtml(p.summary)}</p>
+      <ul>
+        ${p.details.map(x => `<li>${escapeHtml(x)}</li>`).join("")}
+      </ul>
+    `;
+
+    const foot = document.getElementById("modalFoot");
+    foot.innerHTML = "";
+    (p.links || []).forEach(l => {
+      const a = document.createElement("a");
+      a.className = "modalLink";
+      a.href = l.href;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = `${l.label} ↗`;
+      foot.appendChild(a);
+    });
+
+    overlay.hidden = false;
+    document.body.style.overflow = "hidden";
+    // focus for accessibility
+    setTimeout(() => modal.focus(), 0);
+  };
+}
+
+/* ----------------- Stats Animation ----------------- */
+
+function animateStatsOnView(){
+  const els = Array.from(document.querySelectorAll(".statNumber"));
+  if (!els.length) return;
+
+  const animateEl = (el) => {
+    if (el.dataset.animated === "1") return;
+    el.dataset.animated = "1";
+
+    const raw = el.getAttribute("data-count");
+    const suffix = el.getAttribute("data-suffix") || "";
+    const target = raw ? Number(raw) : null;
+    if (!Number.isFinite(target)) return;
+
+    const isFloat = String(raw).includes(".");
+    const duration = 800;
+    const start = performance.now();
+
+    const tick = (t) => {
+      const p = Math.min(1, (t - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = target * eased;
+
+      el.textContent = isFloat ? val.toFixed(1) + suffix : Math.round(val).toString() + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+  };
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) animateEl(e.target);
+    });
+  }, { threshold: 0.55 });
+
+  els.forEach(el => obs.observe(el));
+}
+
+/* ----------------- Particles Background ----------------- */
+
+function startParticles(){
+  const canvas = document.getElementById("bg");
+  const ctx = canvas.getContext("2d", { alpha: true });
+
+  let w = 0, h = 0;
+  const DPR = Math.min(2, window.devicePixelRatio || 1);
+
+  const resize = () => {
+    w = canvas.clientWidth = window.innerWidth;
+    h = canvas.clientHeight = window.innerHeight;
+    canvas.width = Math.floor(w * DPR);
+    canvas.height = Math.floor(h * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  };
+  window.addEventListener("resize", resize);
+  resize();
+
+  const count = Math.floor(Math.max(50, (w * h) / 24000));
+  const pts = Array.from({ length: count }).map(() => ({
+    x: Math.random() * w,
+    y: Math.random() * h,
+    vx: (Math.random() - 0.5) * 0.18,
+    vy: (Math.random() - 0.5) * 0.18,
+    r: Math.random() * 1.8 + 0.6
+  }));
+
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+
+    // read glow strength from CSS mode (subtle shift)
+    const mode = document.body.getAttribute("data-mode") || "studio";
+    const alphaDot = mode === "nebula" ? 0.18 : 0.12;
+    const alphaLine = mode === "nebula" ? 0.10 : 0.07;
+
+    // move
+    for (const p of pts){
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < -20) p.x = w + 20;
+      if (p.x > w + 20) p.x = -20;
+      if (p.y < -20) p.y = h + 20;
+      if (p.y > h + 20) p.y = -20;
+    }
+
+    // lines
+    for (let i=0;i<pts.length;i++){
+      for (let j=i+1;j<pts.length;j++){
+        const a = pts[i], b = pts[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d < 120){
+          ctx.globalAlpha = alphaLine * (1 - d/120);
+          ctx.strokeStyle = "rgba(140,170,255,1)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // dots
+    for (const p of pts){
+      ctx.globalAlpha = alphaDot;
+      ctx.fillStyle = "rgba(170,190,255,1)";
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(draw);
+  }
+
+  requestAnimationFrame(draw);
+}
       ],
     },
     {
