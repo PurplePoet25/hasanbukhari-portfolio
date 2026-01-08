@@ -1300,18 +1300,40 @@ function startParticles(){
   const modalBullets = qs("#modalBullets");
   let lastFocus = null;
 
-  function openModal() {
-    modal.classList.add("is-open");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
+  function openModal(key){
+  const p = PROJECTS[key];
+  if(!p) return;
 
-  function closeModal() {
-    modal.classList.remove("is-open");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-    if (lastFocus) lastFocus.focus();
-  }
+  modalTitle.textContent = p.title;
+  modalMeta.textContent = `${p.meta} • ${p.year}`;
+  modalDesc.textContent = p.desc;
+
+  modalTags.innerHTML = "";
+  p.tags.forEach(t => {
+    const span = document.createElement("span");
+    span.className = "tag";
+    span.textContent = t;
+    modalTags.appendChild(span);
+  });
+
+  modalBullets.innerHTML = p.bullets.map(b => `<li>${b}</li>`).join("");
+
+  modalLinks.innerHTML = (p.links || []).map(l => `
+    <a class="btn btn--sm btn--ghost" href="${l.href}" target="_blank" rel="noopener">
+      ${l.label} ↗
+    </a>
+  `).join("");
+
+  modal.hidden = false;        
+  modal.classList.add("is-open");
+  modal.setAttribute("aria-hidden","false");
+}
+
+  function closeModal(){
+  modal.classList.remove("is-open");
+  modal.setAttribute("aria-hidden","true");
+  modal.hidden = true;         
+}
 
   function openProject(id) {
     const p = PROJECTS.find((x) => x.id === id);
