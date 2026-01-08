@@ -663,32 +663,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initProjects();
   initBackgroundCanvas();
 });
-    if (e.key.toLowerCase() === "g" && !isTypingTarget(e.target)) {
-      const current = document.body.getAttribute("data-mode") || "studio";
-      setMode(current === "studio" ? "nebula" : "studio", true);
-    }
-  });
-
-  function setMode(mode, announce){
-    document.body.setAttribute("data-mode", mode);
-    localStorage.setItem("hb_mode", mode);
-    glowToggle.setAttribute("aria-pressed", mode === "nebula" ? "true" : "false");
-    glowLabel.textContent = mode === "nebula" ? "Glow: On" : "Glow: Off";
-    if (announce) toast(mode === "nebula" ? "Glow enabled" : "Glow disabled");
-  }
-
-  // Copy buttons
-  document.querySelectorAll("[data-copy]").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const what = btn.getAttribute("data-copy");
-      let text = "";
-      if (what === "email") text = PROFILE.email;
-      if (what === "profiles") text = `GitHub: ${PROFILE.github}\nLinkedIn: ${PROFILE.linkedin}`;
-
-      const ok = await copyToClipboard(text);
-      toast(ok ? "Copied" : "Copy failed (browser blocked clipboard)");
-    });
-  });
 
   // View projects button
   const viewProjectsBtn = document.getElementById("viewProjectsBtn");
@@ -697,14 +671,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Nav active state based on scroll
-  setupActiveNav();
-
-  // Projects render + filtering
-  renderProjects(PROJECTS);
-  setupProjectFilters(PROJECTS);
-
-  // Modal
-  setupModal();
+  setupActiveNav();;
 
   // Contact form => mailto draft
   const form = document.getElementById("contactForm");
