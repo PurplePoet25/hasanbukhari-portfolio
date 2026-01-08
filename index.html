@@ -5,11 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#0b1020" />
   <title>Hasan Bukhari — Portfolio</title>
-  <meta name="description" content="Hasan Bukhari — Computer Science + Biology. Projects in simulation, data visualization, and full-stack tools." />
+  <meta
+    name="description"
+    content="Hasan Bukhari — Computer Science + Biology. Projects in simulation, data visualization, and full-stack tools."
+  />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -23,7 +29,7 @@
   <header class="topbar">
     <div class="topbarInner">
       <a class="brand" href="#home" aria-label="Go to Home">
-        <div class="brandMark">HB</div>
+        <div class="brandMark" aria-hidden="true">HB</div>
         <div class="brandText">
           <div class="brandName">Hasan Bukhari</div>
           <div class="brandTag">CS + Biology • simulations • full-stack • data visualization</div>
@@ -31,9 +37,450 @@
       </a>
 
       <div class="topbarActions">
+        <!-- Glow (just stronger glow visuals) -->
         <button class="chipBtn" id="glowToggle" type="button" aria-pressed="false" title="Toggle glow mode">
-          <span class="dot"></span>
+          <span class="dot" aria-hidden="true"></span>
           <span id="glowLabel">Glow</span>
+        </button>
+
+        <!-- Theme mode (studio vs nebula) -->
+        <button class="chipBtn primary" id="modeToggle" type="button" aria-pressed="false" title="Toggle Nebula mode">
+          <span class="ext" aria-hidden="true">✦</span>
+          <span id="modeLabel">Nebula</span>
+        </button>
+
+        <a class="chipBtn" href="assets/HasanResumeCV.pdf" target="_blank" rel="noreferrer">
+          <span class="ext" aria-hidden="true">↗</span>
+          <span>Resume</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Desktop dock -->
+  <nav class="dock desktopDock" aria-label="Primary">
+    <a class="dockItem active" href="#home" data-nav="home">
+      <span class="icon" aria-hidden="true">⌂</span>
+      <span>Home</span>
+    </a>
+    <a class="dockItem" href="#projects" data-nav="projects">
+      <span class="icon" aria-hidden="true">⌘</span>
+      <span>Projects</span>
+    </a>
+    <a class="dockItem" href="#resume" data-nav="resume">
+      <span class="icon" aria-hidden="true">⎙</span>
+      <span>Resume</span>
+    </a>
+    <a class="dockItem" href="#contact" data-nav="contact">
+      <span class="icon" aria-hidden="true">✉</span>
+      <span>Contact</span>
+    </a>
+  </nav>
+
+  <!-- Mobile dock -->
+  <nav class="dock mobileDock" aria-label="Primary">
+    <a class="dockItem active" href="#home" data-nav="home" aria-label="Home">
+      <span class="icon" aria-hidden="true">⌂</span>
+      <span>Home</span>
+    </a>
+    <a class="dockItem" href="#projects" data-nav="projects" aria-label="Projects">
+      <span class="icon" aria-hidden="true">⌘</span>
+      <span>Projects</span>
+    </a>
+    <a class="dockItem" href="#resume" data-nav="resume" aria-label="Resume">
+      <span class="icon" aria-hidden="true">⎙</span>
+      <span>Resume</span>
+    </a>
+    <a class="dockItem" href="#contact" data-nav="contact" aria-label="Contact">
+      <span class="icon" aria-hidden="true">✉</span>
+      <span>Contact</span>
+    </a>
+  </nav>
+
+  <main class="container">
+    <!-- =========================
+         HOME
+    ========================== -->
+    <section id="home" class="section">
+      <div class="hero">
+        <!-- Left -->
+        <div>
+          <div class="badges">
+            <span class="badge soft">Computer Science</span>
+            <span class="badge">Biology</span>
+            <span class="badge">Full-stack</span>
+            <span class="badge">Data viz</span>
+          </div>
+
+          <h1 class="heroTitle">
+            I build clean tools, weird little simulations, and practical software that ships.
+          </h1>
+
+          <p class="heroSub">
+            I’m Hasan — CS + Biology. I like projects where code meets people: visualization, automation,
+            prototypes that turn into real things, and systems that don’t crumble the second you touch them.
+          </p>
+
+          <div class="heroCtas">
+            <a class="btn primary" href="#projects">
+              <span>Explore projects</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="btn" href="assets/HasanResumeCV.pdf" target="_blank" rel="noreferrer">
+              <span>Open resume</span>
+              <span class="ext" aria-hidden="true">↗</span>
+            </a>
+            <a class="btn" href="#contact">
+              <span>Contact</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+
+          <div class="statsGrid" aria-label="Quick stats">
+            <div class="statCard">
+              <div class="statNumber" id="statProjects">10+</div>
+              <div class="statLabel">Projects shipped</div>
+            </div>
+            <div class="statCard">
+              <div class="statNumber" id="statStacks">Python • C++</div>
+              <div class="statLabel">Primary languages</div>
+            </div>
+            <div class="statCard">
+              <div class="statNumber" id="statFocus">Systems</div>
+              <div class="statLabel">Focus vibe</div>
+            </div>
+          </div>
+
+          <div class="toolRow" aria-label="Tools I use">
+            <span class="toolPill">Python</span>
+            <span class="toolPill">C++</span>
+            <span class="toolPill">SQL</span>
+            <span class="toolPill">Git</span>
+            <span class="toolPill">Pygame</span>
+            <span class="toolPill">SFML</span>
+            <span class="toolPill">Web</span>
+          </div>
+        </div>
+
+        <!-- Right -->
+        <div class="heroRight">
+          <aside class="profileCard" aria-label="Profile card">
+            <div class="profileTop">
+              <div class="avatarWrap">
+                <img class="avatar" src="assets/avatar.jpg" alt="Portrait of Hasan Bukhari" />
+                <div class="avatarFallback" aria-hidden="true">HB</div>
+              </div>
+              <div>
+                <div class="profileName">Hasan Bukhari</div>
+                <div class="profileDesc">CS + Biology • builder energy • high-contrast UI enjoyer</div>
+              </div>
+            </div>
+
+            <div class="pillRow">
+              <span class="miniPill">US-based</span>
+              <span class="miniPill">Student</span>
+              <span class="miniPill">Research-curious</span>
+              <span class="miniPill">Toolmaker</span>
+            </div>
+
+            <div class="quote">
+              <span class="quoteMark" aria-hidden="true">“</span>
+              I like turning messy problems into clean interfaces — and then stress-testing them until they behave.
+              <span class="quoteMark" aria-hidden="true">”</span>
+            </div>
+
+            <div class="profileActions">
+              <a class="btnSmall" href="#projects">Projects</a>
+              <a class="btnSmall" href="assets/HasanResumeCV.pdf" target="_blank" rel="noreferrer">Resume</a>
+              <button class="btnSmall" id="copyEmailBtn" type="button">Copy email</button>
+            </div>
+          </aside>
+
+          <aside class="focusCard" aria-label="Focus areas">
+            <div class="cardTitle">Right now</div>
+            <ul class="bullets">
+              <li>Building portfolio projects with real UX polish</li>
+              <li>Sharpening systems fundamentals + data structures</li>
+              <li>Exploring bioinformatics + research workflows</li>
+            </ul>
+          </aside>
+
+          <aside class="panel" aria-label="Quick highlights">
+            <div class="cardTitle">Highlights</div>
+            <ul class="bullets">
+              <li>Simulation / game mechanics</li>
+              <li>Automation tools (quality-of-life)</li>
+              <li>Readable code + documentation</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         PROJECTS
+    ========================== -->
+    <section id="projects" class="section">
+      <div class="sectionHead">
+        <h2>Projects</h2>
+        <p>Click a project to open details. Search + filter if you’re stalking efficiently (respect).</p>
+      </div>
+
+      <div class="projectControls">
+        <div class="searchWrap">
+          <input
+            id="projectSearch"
+            type="search"
+            placeholder="Search projects (e.g., pygame, C++, data, web)…"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="filters" aria-label="Project filters">
+          <button class="filterBtn active" type="button" data-filter="all">All</button>
+          <button class="filterBtn" type="button" data-filter="python">Python</button>
+          <button class="filterBtn" type="button" data-filter="cpp">C++</button>
+          <button class="filterBtn" type="button" data-filter="web">Web</button>
+          <button class="filterBtn" type="button" data-filter="data">Data</button>
+        </div>
+      </div>
+
+      <div class="projectsGrid" id="projectsGrid" aria-label="Project list">
+        <!-- Example cards — you’ll replace titles/desc/links with your real set -->
+        <article class="projectCard" tabindex="0"
+          data-tags="python,game,simulation"
+          data-title="To Ash Again"
+          data-meta="Python • Pygame"
+          data-desc="A pixel-art platformer with character switching, cutscenes, powers inventory, and enemy systems."
+          data-links='[{"label":"Repo","href":"#"},{"label":"Demo","href":"#"}]'
+        >
+          <h3 class="projectTitle">To Ash Again</h3>
+          <p class="projectDesc">Pixel-art platformer in Pygame: movement systems, cutscenes, powers, enemies.</p>
+          <div class="projectMetaRow">
+            <span class="tag">Python</span>
+            <span class="tag">Pygame</span>
+            <span class="tag">Game systems</span>
+          </div>
+        </article>
+
+        <article class="projectCard" tabindex="0"
+          data-tags="cpp,graphs,systems"
+          data-title="Campus Pathfinder+"
+          data-meta="C++ • Graphs"
+          data-desc="Shortest-path campus navigation using graphs (Dijkstra), CSV data, and interactive map overlays."
+          data-links='[{"label":"Repo","href":"#"}]'
+        >
+          <h3 class="projectTitle">Campus Pathfinder+</h3>
+          <p class="projectDesc">Graph-based pathfinding with CSV nodes/edges, interactive map overlays, and tooling.</p>
+          <div class="projectMetaRow">
+            <span class="tag">C++</span>
+            <span class="tag">Graphs</span>
+            <span class="tag">Dijkstra</span>
+          </div>
+        </article>
+
+        <article class="projectCard" tabindex="0"
+          data-tags="web,ui,tooling"
+          data-title="Portfolio"
+          data-meta="HTML/CSS/JS"
+          data-desc="High-contrast, cross-platform portfolio with animated background canvas, filters, modal, and accessibility."
+          data-links='[{"label":"Repo","href":"#"}]'
+        >
+          <h3 class="projectTitle">Portfolio</h3>
+          <p class="projectDesc">Clean UI, fast interactions, and a background that feels alive (without melting phones).</p>
+          <div class="projectMetaRow">
+            <span class="tag">Web</span>
+            <span class="tag">UI</span>
+            <span class="tag">JS</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- =========================
+         RESUME
+    ========================== -->
+    <section id="resume" class="section">
+      <div class="sectionHead">
+        <h2>Resume</h2>
+        <p>Quick overview here. Full PDF available anytime.</p>
+      </div>
+
+      <div class="resumeBtns">
+        <a class="btn primary" href="assets/HasanResumeCV.pdf" target="_blank" rel="noreferrer">
+          <span>Open PDF</span>
+          <span class="ext" aria-hidden="true">↗</span>
+        </a>
+        <a class="btn" href="#contact">
+          <span>Hire me (politely)</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="twoCol">
+        <div class="panel">
+          <div class="panelTitle">Experience</div>
+
+          <div class="timeline" aria-label="Experience timeline">
+            <div class="timeItem">
+              <div class="timeTop">
+                <div class="timeRole">Student • Computer Science</div>
+                <div class="timeWhen">Current</div>
+              </div>
+              <div class="timeOrg">University of Southern Mississippi</div>
+              <div class="timeMeta">
+                Coursework + project work across systems, data structures, web tooling, and research-adjacent projects.
+              </div>
+            </div>
+
+            <div class="timeItem">
+              <div class="timeTop">
+                <div class="timeRole">Leadership • Student Poets Association</div>
+                <div class="timeWhen">Ongoing</div>
+              </div>
+              <div class="timeOrg">President</div>
+              <div class="timeMeta">
+                Organizing events, coordinating teams, managing deliverables. Yes, it’s project management — just artistic.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panelTitle">Skills</div>
+
+          <div class="skillGroups" aria-label="Skills">
+            <div>
+              <div class="skillHead">Languages</div>
+              <div class="skillPills">
+                <span class="skillPill">Python</span>
+                <span class="skillPill">C++</span>
+                <span class="skillPill">SQL</span>
+                <span class="skillPill">JavaScript</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="skillHead">Tooling</div>
+              <div class="skillPills">
+                <span class="skillPill">Git</span>
+                <span class="skillPill">Linux</span>
+                <span class="skillPill">Pygame</span>
+                <span class="skillPill">SFML</span>
+              </div>
+            </div>
+
+            <div class="note">
+              Want the real details? The PDF has the full timeline, coursework, and project writeups.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         CONTACT
+    ========================== -->
+    <section id="contact" class="section">
+      <div class="sectionHead">
+        <h2>Contact</h2>
+        <p>Reach out. If you’re building something interesting, I’m down to talk.</p>
+      </div>
+
+      <div class="twoCol">
+        <div class="panel">
+          <div class="panelTitle">Quick links</div>
+
+          <div class="quickLinks" aria-label="Contact links">
+            <a class="linkRow" href="mailto:hasan@example.com" id="emailLink">
+              Email: <span class="muted" id="emailText">hasan@example.com</span>
+            </a>
+            <a class="linkRow" href="#" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="linkRow" href="#" target="_blank" rel="noreferrer">LinkedIn</a>
+          </div>
+
+          <div class="copyRow">
+            <button class="btnSmall" type="button" id="copyEmailBtn2">Copy email</button>
+            <a class="btnSmall" href="assets/HasanResumeCV.pdf" target="_blank" rel="noreferrer">Resume PDF</a>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panelTitle">Message</div>
+
+          <form class="form" id="contactForm">
+            <div class="field">
+              <span>Name</span>
+              <input type="text" name="name" placeholder="Your name" autocomplete="name" />
+            </div>
+
+            <div class="field">
+              <span>Email</span>
+              <input type="email" name="email" placeholder="you@domain.com" autocomplete="email" />
+            </div>
+
+            <div class="field">
+              <span>Subject</span>
+              <input type="text" name="subject" placeholder="What’s this about?" />
+            </div>
+
+            <div class="field">
+              <span>Message</span>
+              <textarea name="message" rows="5" placeholder="Say the thing."></textarea>
+            </div>
+
+            <div class="formActions">
+              <button class="btn primary" type="submit">
+                <span>Send</span>
+                <span class="arrow" aria-hidden="true">→</span>
+              </button>
+              <button class="btn" type="reset">Reset</button>
+            </div>
+
+            <p class="muted" style="margin:0; font-size:12px; line-height:1.6;">
+              This form can be wired to EmailJS / Formspree / a backend later. For now, it won’t magically teleport messages (sadly).
+            </p>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="muted">© <span id="year"></span> Hasan Bukhari</div>
+        <div class="muted">Built with HTML/CSS/JS • high-contrast by design</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================
+       PROJECT MODAL
+       NOTE: panel class renamed to .modalPanel to avoid collisions.
+  ========================== -->
+  <div class="modalOverlay" id="modalOverlay" hidden>
+    <div class="modalPanel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modalHead">
+        <div>
+          <div class="modalTitle" id="modalTitle">Project</div>
+          <div class="modalMeta" id="modalMeta">Meta</div>
+        </div>
+        <button class="iconBtn" id="modalClose" type="button" aria-label="Close">✕</button>
+      </div>
+
+      <div class="modalBody" id="modalBody">
+        <!-- filled by JS -->
+      </div>
+
+      <div class="modalFoot" id="modalFoot" aria-label="Project links">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" hidden>Copied!</div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
         </button>
 
         <a class="chipBtn primary" id="openResumeTop" href="assets/HasanResumeCV.pdf" target="_blank" rel="noopener">
