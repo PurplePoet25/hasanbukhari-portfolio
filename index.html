@@ -2,38 +2,371 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light dark" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b1020" />
   <title>Hasan Bukhari — Portfolio</title>
-  <meta name="description" content="Hasan Bukhari — CS + Biology. Software, simulations, data visualization, and computational biology." />
+  <meta name="description" content="Hasan Bukhari — Computer Science + Biology. Projects in simulation, data visualization, and full-stack tools." />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- IMPORTANT: keep this filename EXACTLY the same as your CSS file -->
   <link rel="stylesheet" href="style.css" />
-
-  <meta property="og:title" content="Hasan Bukhari — Portfolio" />
-  <meta property="og:description" content="Software • simulations • data viz • computational biology" />
-  <meta property="og:type" content="website" />
 </head>
 
-<body>
-  <!-- Ambient background -->
-  <canvas id="particles" aria-hidden="true"></canvas>
-  <div class="aurora" aria-hidden="true"></div>
-  <div class="grid" aria-hidden="true"></div>
+<body data-mode="studio">
+  <!-- Background -->
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <div class="bgGlow" aria-hidden="true"></div>
 
-  <a class="skip" href="#content">Skip to content</a>
-
+  <!-- Top Bar -->
   <header class="topbar">
-    <div class="brand">
-      <div class="brand__mark" aria-hidden="true">HB</div>
-      <div class="brand__text">
-        <div class="brand__name">Hasan Bukhari</div>
-        <div class="brand__tag">CS + Biology • simulations • full‑stack • data viz</div>
+    <div class="topbarInner">
+      <a class="brand" href="#home" aria-label="Go to Home">
+        <div class="brandMark">HB</div>
+        <div class="brandText">
+          <div class="brandName">Hasan Bukhari</div>
+          <div class="brandTag">CS + Biology • simulations • full-stack • data visualization</div>
+        </div>
+      </a>
+
+      <div class="topbarActions">
+        <button class="chipBtn" id="glowToggle" type="button" aria-pressed="false" title="Toggle glow mode">
+          <span class="dot"></span>
+          <span id="glowLabel">Glow</span>
+        </button>
+
+        <a class="chipBtn primary" id="openResumeTop" href="assets/HasanResumeCV.pdf" target="_blank" rel="noopener">
+          Open Resume <span class="ext">↗</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Desktop Dock Nav -->
+  <nav class="dock desktopDock" aria-label="Primary">
+    <a class="dockItem active" href="#home" data-nav="home">
+      <span class="icon">⌂</span><span class="label">Home</span>
+    </a>
+    <a class="dockItem" href="#projects" data-nav="projects">
+      <span class="icon">✦</span><span class="label">Projects</span>
+    </a>
+    <a class="dockItem" href="#resume" data-nav="resume">
+      <span class="icon">≡</span><span class="label">Resume</span>
+    </a>
+    <a class="dockItem" href="#contact" data-nav="contact">
+      <span class="icon">✉</span><span class="label">Contact</span>
+    </a>
+  </nav>
+
+  <main>
+    <!-- HOME -->
+    <section id="home" class="section">
+      <div class="container hero">
+        <div class="heroLeft">
+          <div class="badges">
+            <span class="badge">Summer 2026 • internship-ready</span>
+            <span class="badge soft">Software • simulations • data-driven research</span>
+          </div>
+
+          <h1 class="heroTitle">
+            I build software that turns complex systems into usable tools.
+          </h1>
+
+          <p class="heroSub">
+            Computer Science major + Biology minor at the University of Southern Mississippi.
+            I focus on simulation, data visualization, and full-stack tooling — with an emphasis on clarity, reliability, and clean UX.
+          </p>
+
+          <div class="heroCtas">
+            <a class="btn primary" href="#projects" id="viewProjectsBtn">View projects <span class="arrow">→</span></a>
+            <a class="btn" href="assets/HasanResumeCV.pdf" download>Download resume <span class="ext">↗</span></a>
+          </div>
+
+          <div class="statsGrid" aria-label="Highlights">
+            <div class="statCard">
+              <div class="statNumber" data-count="4.0">4.0</div>
+              <div class="statLabel">GPA • President’s List</div>
+            </div>
+            <div class="statCard">
+              <div class="statNumber" data-count="6" data-suffix="+">6+</div>
+              <div class="statLabel">Major projects shipped</div>
+            </div>
+            <div class="statCard">
+              <div class="statNumber" data-count="200" data-suffix="+">200+</div>
+              <div class="statLabel">Users supported (Sc-Roll)</div>
+            </div>
+          </div>
+
+          <div class="toolRow" aria-label="Toolbox">
+            <span class="toolPill">Python</span>
+            <span class="toolPill">C++</span>
+            <span class="toolPill">React</span>
+            <span class="toolPill">Pygame</span>
+            <span class="toolPill">NumPy / Pandas</span>
+            <span class="toolPill">SQL (basic)</span>
+            <span class="toolPill">Git/GitHub</span>
+            <span class="toolPill">Linux Shell</span>
+          </div>
+        </div>
+
+        <aside class="heroRight">
+          <div class="profileCard">
+            <div class="profileTop">
+              <div class="avatarWrap">
+                <img class="avatar" src="assets/avatar.jpg" alt="Hasan Bukhari" onerror="this.style.display='none'; document.querySelector('.avatarFallback').style.display='grid';">
+                <div class="avatarFallback" aria-hidden="true">HB</div>
+              </div>
+
+              <div class="profileMeta">
+                <div class="profileName">Hasan Bukhari</div>
+                <div class="profileDesc">Software • simulations • computational biology</div>
+                <div class="pillRow">
+                  <span class="miniPill">Python</span>
+                  <span class="miniPill">C++</span>
+                  <span class="miniPill">React</span>
+                  <span class="miniPill">Pygame</span>
+                  <span class="miniPill">NumPy/Pandas</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="quote">
+              <span class="quoteMark">“</span>
+              I prioritize clarity: tools should be fast to understand and hard to misuse.
+              <span class="quoteMark">”</span>
+            </div>
+
+            <div class="profileActions">
+              <button class="btnSmall" type="button" data-copy="email">Copy email</button>
+              <button class="btnSmall" type="button" data-copy="profiles">Copy profile links</button>
+              <a class="btnSmall" href="https://github.com/PurplePoet25" target="_blank" rel="noopener">GitHub ↗</a>
+              <a class="btnSmall" href="https://linkedin.com/in/hasan-bukhari-7ab080305" target="_blank" rel="noopener">LinkedIn ↗</a>
+            </div>
+          </div>
+
+          <div class="focusCard">
+            <div class="cardTitle">Current focus</div>
+            <ul class="bullets">
+              <li>Software engineering + R&amp;D tooling</li>
+              <li>Simulation-driven learning tools</li>
+              <li>Clean, accessible UX with strong fundamentals</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="sectionHead">
+          <h2>Projects</h2>
+          <p>Selected work across simulation, visualization, and product-style engineering.</p>
+        </div>
+
+        <div class="projectControls">
+          <div class="searchWrap">
+            <input id="projectSearch" type="search" placeholder="Search projects (e.g., simulation, bio, web)..." autocomplete="off">
+          </div>
+          <div class="filters" id="tagFilters" aria-label="Project filters"></div>
+        </div>
+
+        <div id="projectsGrid" class="projectsGrid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- RESUME -->
+    <section id="resume" class="section">
+      <div class="container">
+        <div class="sectionHead">
+          <h2>Resume</h2>
+          <p>Timeline + core skills. Download the PDF for full details.</p>
+          <div class="resumeBtns">
+            <a class="btn primary" href="assets/HasanResumeCV.pdf" target="_blank" rel="noopener">Open PDF ↗</a>
+            <a class="btn" href="assets/HasanResumeCV.pdf" download>Download PDF ↗</a>
+          </div>
+        </div>
+
+        <div class="twoCol">
+          <div class="panel">
+            <div class="panelTitle">Timeline</div>
+            <div class="timeline">
+              <div class="timeItem">
+                <div class="timeTop">
+                  <div class="timeRole">B.S. Computer &amp; Information Sciences</div>
+                  <div class="timeWhen">Aug 2024 – May 2028</div>
+                </div>
+                <div class="timeOrg">University of Southern Mississippi</div>
+                <div class="timeMeta">Minors: Biology, Political Science • 4.0 GPA • President’s List</div>
+              </div>
+
+              <div class="timeItem">
+                <div class="timeTop">
+                  <div class="timeRole">Student Worker (Event Logistics + Technical Support)</div>
+                  <div class="timeWhen">Jun 2024 – Present</div>
+                </div>
+                <div class="timeOrg">USM</div>
+                <div class="timeMeta">Operational support for events; process improvements and technical coordination.</div>
+              </div>
+
+              <div class="timeItem">
+                <div class="timeTop">
+                  <div class="timeRole">Software Engineering Intern</div>
+                  <div class="timeWhen">Aug 2023 – Feb 2024</div>
+                </div>
+                <div class="timeOrg">Shahid I.T. Consultants</div>
+                <div class="timeMeta">Automation + testing + documentation; reduced manual workload and improved reliability.</div>
+              </div>
+
+              <div class="timeItem">
+                <div class="timeTop">
+                  <div class="timeRole">President &amp; Founder</div>
+                  <div class="timeWhen">2024 – Present</div>
+                </div>
+                <div class="timeOrg">Student Poets Association &amp; Creative Writing Club</div>
+                <div class="timeMeta">Leadership, event organization, community building.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panelTitle">Skills</div>
+            <div class="skillGroups">
+              <div class="skillGroup">
+                <div class="skillHead">Programming</div>
+                <div class="skillPills">
+                  <span class="skillPill">Python</span>
+                  <span class="skillPill">C++</span>
+                  <span class="skillPill">JavaScript</span>
+                  <span class="skillPill">SQL (basic)</span>
+                </div>
+              </div>
+
+              <div class="skillGroup">
+                <div class="skillHead">Data + Simulation</div>
+                <div class="skillPills">
+                  <span class="skillPill">NumPy</span>
+                  <span class="skillPill">Pandas</span>
+                  <span class="skillPill">Matplotlib</span>
+                  <span class="skillPill">Modeling</span>
+                </div>
+              </div>
+
+              <div class="skillGroup">
+                <div class="skillHead">Web</div>
+                <div class="skillPills">
+                  <span class="skillPill">React</span>
+                  <span class="skillPill">HTML/CSS</span>
+                  <span class="skillPill">UX fundamentals</span>
+                </div>
+              </div>
+
+              <div class="skillGroup">
+                <div class="skillHead">Tools</div>
+                <div class="skillPills">
+                  <span class="skillPill">Git/GitHub</span>
+                  <span class="skillPill">Linux shell</span>
+                  <span class="skillPill">VS Code</span>
+                  <span class="skillPill">Jupyter</span>
+                </div>
+              </div>
+
+              <div class="note">
+                <strong>Note:</strong> This portfolio is static (GitHub Pages). Forms open a prefilled email draft — no data is stored.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="sectionHead">
+          <h2>Contact</h2>
+          <p>Fastest way: email. You can also use the form to open a prefilled draft.</p>
+        </div>
+
+        <div class="twoCol">
+          <div class="panel">
+            <div class="panelTitle">Quick links</div>
+            <div class="quickLinks">
+              <a class="linkRow" href="#" id="emailLink">Email: <span id="emailText"></span></a>
+              <a class="linkRow" href="https://github.com/PurplePoet25" target="_blank" rel="noopener">GitHub ↗</a>
+              <a class="linkRow" href="https://linkedin.com/in/hasan-bukhari-7ab080305" target="_blank" rel="noopener">LinkedIn ↗</a>
+            </div>
+
+            <div class="copyRow">
+              <button class="btnSmall" type="button" data-copy="email">Copy email</button>
+              <button class="btnSmall" type="button" data-copy="profiles">Copy profile links</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panelTitle">Send a message</div>
+            <form id="contactForm" class="form">
+              <label class="field">
+                <span>Name</span>
+                <input name="name" type="text" placeholder="Your name" required />
+              </label>
+
+              <label class="field">
+                <span>Email</span>
+                <input name="from" type="email" placeholder="you@domain.com" required />
+              </label>
+
+              <label class="field">
+                <span>Message</span>
+                <textarea name="message" rows="5" placeholder="What would you like to build or discuss?" required></textarea>
+              </label>
+
+              <div class="formActions">
+                <button class="btn primary" type="submit">Open email draft ↗</button>
+                <button class="btn" type="reset">Reset</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div>© <span id="year"></span> Hasan Bukhari</div>
+          <div class="muted">Built with vanilla HTML/CSS/JS • Hosted on GitHub Pages</div>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <!-- Mobile Dock -->
+  <nav class="dock mobileDock" aria-label="Primary mobile">
+    <a class="dockItem active" href="#home" data-nav="home"><span class="icon">⌂</span><span class="label">Home</span></a>
+    <a class="dockItem" href="#projects" data-nav="projects"><span class="icon">✦</span><span class="label">Projects</span></a>
+    <a class="dockItem" href="#resume" data-nav="resume"><span class="icon">≡</span><span class="label">Resume</span></a>
+    <a class="dockItem" href="#contact" data-nav="contact"><span class="icon">✉</span><span class="label">Contact</span></a>
+  </nav>
+
+  <!-- Modal -->
+  <div class="modalOverlay" id="modalOverlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+      <div class="modalHead">
+        <div class="modalTitleWrap">
+          <div id="modalTitle" class="modalTitle">Project</div>
+          <div id="modalMeta" class="modalMeta">Tech • Year</div>
+        </div>
+        <button class="iconBtn" id="modalClose" type="button" aria-label="Close (Esc)">✕</button>
+      </div>
+      <div class="modalBody" id="modalBody"></div>
+      <div class="modalFoot" id="modalFoot"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
       </div>
     </div>
 
