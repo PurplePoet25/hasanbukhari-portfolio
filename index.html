@@ -105,6 +105,363 @@
 
           <div class="stats">
             <div class="stat">
+              <div class="stat__num" data-count="4.0" data-decimals="1">4.0</div>
+              <div class="stat__label">GPA • President’s List</div>
+            </div>
+            <div class="stat">
+              <div class="stat__num" data-count="6" data-suffix="+">6+</div>
+              <div class="stat__label">Major projects shipped</div>
+            </div>
+            <div class="stat">
+              <div class="stat__num" data-count="200" data-suffix="+">200+</div>
+              <div class="stat__label">Users served (Sc‑Roll)</div>
+            </div>
+          </div>
+
+          <div class="mini">
+            <div class="mini__title">Try this:</div>
+            <div class="mini__body">
+              Press <kbd>G</kbd> for a tiny surprise. (Or don’t. I’m not your boss.)
+            </div>
+          </div>
+        </div>
+
+        <div class="hero__right">
+          <div class="card profile">
+            <div class="profile__top">
+              <div class="avatar" aria-label="Profile image">
+                <img src="assets/avatar.png" alt="Hasan avatar" loading="lazy"
+                     onerror="this.remove(); this.parentElement.classList.add('avatar--fallback')" />
+                <div class="avatar__fallback" aria-hidden="true">
+                  <div class="avatar__ring"></div>
+                  <div class="avatar__initials">HB</div>
+                </div>
+              </div>
+
+              <div class="profile__meta">
+                <div class="profile__name">Hasan Bukhari</div>
+                <div class="profile__subtitle">Software • simulations • computational biology</div>
+                <div class="profile__chips">
+                  <span class="tag">Python</span>
+                  <span class="tag">C++</span>
+                  <span class="tag">React</span>
+                  <span class="tag">Pygame</span>
+                  <span class="tag">NumPy / Pandas</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile__quote">
+              “I treat projects like poems: rhythm matters.”
+            </div>
+
+            <div class="profile__links">
+              <button class="linkbtn" type="button" data-copy="hasan.bukhari@usm.edu">
+                Copy email
+              </button>
+              <button class="linkbtn" type="button" data-copy-links>
+                Copy profile links
+              </button>
+              <a class="linkbtn linkbtn--ghost" href="https://github.com/PurplePoet25" target="_blank" rel="noopener">GitHub ↗</a>
+              <a class="linkbtn linkbtn--ghost" href="https://linkedin.com/in/hasan-bukhari-7ab080305/" target="_blank" rel="noopener">LinkedIn ↗</a>
+            </div>
+          </div>
+
+          <div class="card blurbox">
+            <div class="blurbox__title">Current focus</div>
+            <ul class="bullets">
+              <li>software engineering + R&D tools</li>
+              <li>simulation-driven learning</li>
+              <li>clean UX with playful polish</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="strip">
+        <div class="strip__label">Toolbox</div>
+        <div class="strip__items" aria-label="Skills">
+          <span class="badge">Git/GitHub (CLI)</span>
+          <span class="badge">Linux Shell</span>
+          <span class="badge">SQL (basic)</span>
+          <span class="badge">Matplotlib</span>
+          <span class="badge">OpenCV</span>
+          <span class="badge">Jupyter</span>
+          <span class="badge">VS Code</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-projects" role="tabpanel" aria-labelledby="tab-projects" tabindex="0">
+      <div class="panelhead">
+        <h2 class="panelhead__title">Projects</h2>
+        <p class="panelhead__sub">Click a card for details. Everything is built with real intent — not “hello world, but louder.”</p>
+
+        <div class="searchrow">
+          <input class="search" id="projectSearch" type="search" placeholder="Search projects (try: python, biology, gui, react…)" autocomplete="off" />
+          <button class="btn btn--ghost btn--sm" id="clearSearch" type="button">Clear</button>
+        </div>
+      </div>
+
+      <div class="cards" id="projectGrid" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" id="panel-resume" role="tabpanel" aria-labelledby="tab-resume" tabindex="0">
+      <div class="panelhead">
+        <h2 class="panelhead__title">Resume</h2>
+        <p class="panelhead__sub">Timeline + skills. Fast to scan, hard to forget.</p>
+
+        <div class="row">
+          <a class="btn btn--ghost btn--sm" href="HasanResumeCV.pdf" target="_blank" rel="noopener">Open PDF ↗</a>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timecard">
+          <div class="timecard__when">Aug 2024 — May 2028</div>
+          <div class="timecard__what">
+            <div class="timecard__title">University of Southern Mississippi — B.S. Computer & Information Sciences</div>
+            <div class="timecard__meta">Minors: Biological Sciences, Political Science • President’s List (4.0 GPA) • Academic Excellence Scholar</div>
+          </div>
+        </div>
+
+        <div class="timecard">
+          <div class="timecard__when">Jun 2024 — Present</div>
+          <div class="timecard__what">
+            <div class="timecard__title">Student Worker — USM</div>
+            <div class="timecard__meta">Event logistics + technical/admin support • 15+ events • +20% workflow efficiency</div>
+          </div>
+        </div>
+
+        <div class="timecard">
+          <div class="timecard__when">Aug 2023 — Feb 2024</div>
+          <div class="timecard__what">
+            <div class="timecard__title">Software Engineering Intern — Shahid I.T. Consultants</div>
+            <div class="timecard__meta">Automation + testing + documentation • −30% manual workload • +25% reliability</div>
+          </div>
+        </div>
+
+        <div class="timecard">
+          <div class="timecard__when">2024 — Present</div>
+          <div class="timecard__what">
+            <div class="timecard__title">IT Coordinator — Student Poets Association & Creative Writing Club (USM)</div>
+            <div class="timecard__meta">Tech + ops support for events and org systems</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="skillsgrid">
+        <div class="skillbox">
+          <div class="skillbox__title">Languages</div>
+          <div class="skillbox__list">
+            <span class="badge">Python (strong)</span>
+            <span class="badge">C++ (strong)</span>
+            <span class="badge">JavaScript</span>
+          </div>
+        </div>
+        <div class="skillbox">
+          <div class="skillbox__title">Web</div>
+          <div class="skillbox__list">
+            <span class="badge">React (solid)</span>
+            <span class="badge">HTML/CSS</span>
+          </div>
+        </div>
+        <div class="skillbox">
+          <div class="skillbox__title">Data / Bio</div>
+          <div class="skillbox__list">
+            <span class="badge">NumPy</span>
+            <span class="badge">Pandas</span>
+            <span class="badge">Matplotlib</span>
+            <span class="badge">Bioinformatics (growing)</span>
+          </div>
+        </div>
+        <div class="skillbox">
+          <div class="skillbox__title">Tools</div>
+          <div class="skillbox__list">
+            <span class="badge">Git/GitHub (CLI)</span>
+            <span class="badge">Linux Shell</span>
+            <span class="badge">SQL (basic)</span>
+            <span class="badge">OpenCV</span>
+            <span class="badge">Pygame</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="honors">
+        <h3 class="honors__title">Honors & Awards</h3>
+        <ul class="bullets">
+          <li>President’s List (4.0 GPA) — USM</li>
+          <li>First Place — Undergraduate Research Symposium (USM)</li>
+          <li>Outstanding Learner Award — Best Across Four AS Levels (Cambridge)</li>
+          <li>Best Project & Assistant Project Manager — ITC 371 (USM)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-contact" role="tabpanel" aria-labelledby="tab-contact" tabindex="0">
+      <div class="panelhead">
+        <h2 class="panelhead__title">Contact</h2>
+        <p class="panelhead__sub">Let’s build something sharp. Or at least something that doesn’t crash.</p>
+      </div>
+
+      <div class="contactgrid">
+        <div class="card contactcard">
+          <div class="contactcard__title">Quick links</div>
+          <div class="contactcard__links">
+            <a href="mailto:hasan.bukhari@usm.edu" class="linkrow">Email me ↗</a>
+            <a href="https://github.com/PurplePoet25" target="_blank" rel="noopener" class="linkrow">github.com/PurplePoet25 ↗</a>
+            <a href="https://linkedin.com/in/hasan-bukhari-7ab080305/" target="_blank" rel="noopener" class="linkrow">linkedin.com/in/hasan-bukhari-7ab080305 ↗</a>
+
+            <div class="contactcard__btns">
+              <button class="btn btn--ghost btn--sm" type="button" data-copy="hasan.bukhari@usm.edu">Copy email</button>
+              <button class="btn btn--ghost btn--sm" type="button" data-copy-links>Copy profile links</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card contactcard">
+          <div class="contactcard__title">Send a message</div>
+          <form id="contactForm" class="form">
+            <label class="field">
+              <span class="field__label">Name</span>
+              <input class="field__input" name="name" placeholder="Your name" />
+            </label>
+            <label class="field">
+              <span class="field__label">Email</span>
+              <input class="field__input" name="email" placeholder="you@domain.com" />
+            </label>
+            <label class="field field--full">
+              <span class="field__label">Message</span>
+              <textarea class="field__input field__input--area" name="message" placeholder="Tell me what you want to build…"></textarea>
+            </label>
+
+            <div class="form__row">
+              <button class="btn btn--primary btn--sm" type="submit">Open email draft</button>
+              <button class="btn btn--ghost btn--sm" type="reset">Reset</button>
+            </div>
+
+            <p class="note">
+              This site is static (GitHub Pages). The form opens a prefilled email draft instead of storing messages anywhere.
+            </p>
+          </form>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div>© <span id="year"></span> Hasan Bukhari</div>
+        <div class="footer__right">
+          Built with ✦ vanilla HTML/CSS/JS • hosted on GitHub Pages
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal__close" type="button" aria-label="Close" data-close>×</button>
+
+      <div class="modal__head">
+        <div class="modal__eyebrow" id="modalMeta"></div>
+        <h3 class="modal__title" id="modalTitle"></h3>
+        <p class="modal__desc" id="modalDesc"></p>
+      </div>
+
+      <div class="modal__body">
+        <div class="modal__tags" id="modalTags"></div>
+        <div class="modal__links" id="modalLinks"></div>
+        <div class="modal__bullets" id="modalBullets"></div>
+      </div>
+
+      <div class="modal__foot">
+        <span class="hint">Tip: press <kbd>Esc</kbd> to close.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+      </div>
+    </div>
+
+    <div class="topbar__actions">
+      <button class="chip" id="glowBtn" type="button" title="Toggle Glow (or press G)">
+        <span class="chip__dot" aria-hidden="true"></span>
+        Glow
+      </button>
+      <a class="chip chip--ghost" href="HasanResumeCV.pdf" target="_blank" rel="noopener">
+        Open Resume
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </header>
+
+  <main id="content" class="stage">
+    <!-- Dock / Tabs -->
+    <nav class="dock" role="tablist" aria-label="Sections">
+      <button class="dock__tab" role="tab" aria-selected="true" aria-controls="panel-home" id="tab-home" data-panel="home">
+        <span class="dock__icon" aria-hidden="true">⌂</span>
+        Home
+      </button>
+      <button class="dock__tab" role="tab" aria-selected="false" aria-controls="panel-projects" id="tab-projects" data-panel="projects">
+        <span class="dock__icon" aria-hidden="true">✦</span>
+        Projects
+      </button>
+      <button class="dock__tab" role="tab" aria-selected="false" aria-controls="panel-resume" id="tab-resume" data-panel="resume">
+        <span class="dock__icon" aria-hidden="true">≡</span>
+        Resume
+      </button>
+      <button class="dock__tab" role="tab" aria-selected="false" aria-controls="panel-contact" id="tab-contact" data-panel="contact">
+        <span class="dock__icon" aria-hidden="true">✉</span>
+        Contact
+      </button>
+
+      <div class="dock__indicator" aria-hidden="true"></div>
+    </nav>
+
+    <!-- Panels -->
+    <section class="panel is-active" id="panel-home" role="tabpanel" aria-labelledby="tab-home" tabindex="0">
+      <div class="hero">
+        <div class="hero__left">
+          <div class="pillrow">
+            <span class="pill"><span aria-hidden="true">✦</span> Summer 2026 • internship‑ready</span>
+            <span class="pill pill--soft">R&D • software • data‑driven research</span>
+          </div>
+
+          <h1 class="headline">
+            I build code that <span class="gradient">explains things</span> —
+            from genomes to game physics.
+          </h1>
+
+          <p class="lede">
+            Computer Science major + Biology minor at the University of Southern Mississippi.
+            I like turning complex systems into interactive tools: simulations, data visualization,
+            and full‑stack apps that don’t feel like a spreadsheet got possessed.
+          </p>
+
+          <div class="cta">
+            <button class="btn btn--primary" type="button" data-jump="projects">
+              View projects
+              <span aria-hidden="true">→</span>
+            </button>
+            <a class="btn btn--ghost" href="HasanResumeCV.pdf" target="_blank" rel="noopener">
+              Download resume
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
               <div class="stat__num">4.0</div>
               <div class="stat__label">GPA • President’s List</div>
             </div>
